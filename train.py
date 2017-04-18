@@ -1,6 +1,6 @@
 from __future__ import print_function
 
-from keras.models import Sequential
+from keras.models import Sequential, model_from_json
 from keras.layers import Conv2D, MaxPooling2D
 from keras.layers import Activation, Dropout, Flatten, Dense
 from keras.layers.normalization import BatchNormalization
@@ -23,9 +23,9 @@ def remove_folder(path):
     os.makedirs(path)
     print ("New folder created")
 
-def load_data(source_path, fold_number, data_type, image_type):
-    images_path_file = '{}{}/{}_{}.txt'.format(source_path, fold_number, image_type, data_type)
-    actual_images = '../processed_{}_{}/'.format(data_type, fold_number)
+def load_data(home_folder, source_folder, fold_number, data_type, image_type):
+    images_path_file = '{}/{}{}/{}_{}.txt'.format(home_folder, source_folder, fold_number, image_type, data_type)
+    actual_images = '{}/processed_{}_{}/'.format(home_folder, data_type, fold_number)
     load_message = 'Loading {} data\n#############\n'.format(data_type)
 
     data=[]
@@ -50,9 +50,9 @@ def load_data(source_path, fold_number, data_type, image_type):
 
 #######################################################################
 
-train_X, train_Y =  load_data(constants.SOURCE_PATH , constants.FOLD, 'train', constants.DATA_TYPE)
-test_X, test_Y =  load_data(constants.SOURCE_PATH, constants.FOLD, 'test', constants.DATA_TYPE)
-validation_X, validation_Y =  load_data(constants.SOURCE_PATH, constants.FOLD, 'validation', constants.DATA_TYPE)
+train_X, train_Y =  load_data(constants.HOME_PATH, constants.SOURCE_FOLDER , constants.FOLD, 'train', constants.DATA_TYPE)
+test_X, test_Y =  load_data(constants.HOME_PATH, constants.SOURCE_FOLDER, constants.FOLD, 'test', constants.DATA_TYPE)
+validation_X, validation_Y =  load_data(constants.HOME_PATH, constants.SOURCE_FOLDER, constants.FOLD, 'validation', constants.DATA_TYPE)
 
 #######################################################################
 
@@ -112,8 +112,8 @@ def lr_schedule(epoch):
     return constants.LEARNING_RATE*(0.1**int(2*epoch/constants.EPOCHS))
 
 def train_model(model):
-    csv_logger = CSVLogger(constants.LOG_FILE)
     remove_folder(constants.FOLDER_NAME)
+    csv_logger = CSVLogger(constants.LOG_FILE)
     build_model(model)
     model.compile(loss='binary_crossentropy',
                   optimizer=constants.OPTIMIZER,
@@ -137,13 +137,13 @@ def test_model(model):
     scores = model.evaluate(test_X, test_Y, verbose=0)
     print("%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
 
-def load_model:
-    json_file = open('rmsprop_fold_0_LR_0_0001/model.json', 'r')
+def load_model():
+    json_file = open('/home/ubuntu/CourseProject/notebook/rmsprop_fold_0_LR_0_0001/model.json', 'r')
     loaded_model_json = json_file.read()
     json_file.close()
     loaded_model = model_from_json(loaded_model_json)
 
-    loaded_model.load_weights('rmsprop_fold_0_LR_0_0001/model.h5')
+    loaded_model.load_weights('/home/ubuntu/CourseProject/notebook/rmsprop_fold_0_LR_0_0001/model.h5')
     print("Loaded model from disk")
 
     # evaluate loaded model on test data
@@ -153,7 +153,7 @@ def load_model:
 
 
 model = Sequential()
-# train_model(model)
-# test_model(model)
-# save_model(model)
+train_model(model)
+test_model(model)
+save_model(model)
 load_model()
