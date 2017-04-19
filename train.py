@@ -50,9 +50,9 @@ def load_data(home_folder, source_folder, fold_number, data_type, image_type):
 
 #######################################################################
 
-train_X, train_Y =  load_data(constants.HOME_PATH, constants.SOURCE_FOLDER , constants.FOLD, 'train', constants.DATA_TYPE)
-test_X, test_Y =  load_data(constants.HOME_PATH, constants.SOURCE_FOLDER, constants.FOLD, 'test', constants.DATA_TYPE)
-validation_X, validation_Y =  load_data(constants.HOME_PATH, constants.SOURCE_FOLDER, constants.FOLD, 'validation', constants.DATA_TYPE)
+train_X, train_Y =  load_data(constants.HOME_PATH, constants.SOURCE_FOLDER , constants.FOLD, 'train', constants.DATA_TYPE_GENDER)
+test_X, test_Y =  load_data(constants.HOME_PATH, constants.SOURCE_FOLDER, constants.FOLD, 'test', constants.DATA_TYPE_GENDER)
+validation_X, validation_Y =  load_data(constants.HOME_PATH, constants.SOURCE_FOLDER, constants.FOLD, 'validation', constants.DATA_TYPE_GENDER)
 
 #######################################################################
 
@@ -111,18 +111,18 @@ def build_model(model):
 def lr_schedule(epoch):
     return constants.LEARNING_RATE*(0.1**int(2*epoch/constants.EPOCHS))
 
-def train_model(model):
+def train_model(model, X, Y, val_X, val_Y):
     remove_folder(constants.FOLDER_NAME)
     csv_logger = CSVLogger(constants.LOG_FILE)
     build_model(model)
     model.compile(loss='binary_crossentropy',
                   optimizer=constants.OPTIMIZER,
                   metrics=['accuracy'])
-    model.fit(train_X, train_Y,
+    model.fit(X, Y,
               batch_size=constants.BATCH_SIZE,
               epochs=constants.EPOCHS,
               validation_split=0.0,
-              validation_data=(validation_X,validation_Y),
+              validation_data=(val_X,val_Y),
               callbacks=[LearningRateScheduler(lr_schedule), csv_logger]
              )
 
@@ -153,7 +153,7 @@ def load_model():
 
 
 model = Sequential()
-train_model(model)
+train_model(model, train_X, train_Y, validation_X, validation_Y)
 test_model(model)
 save_model(model)
 load_model()

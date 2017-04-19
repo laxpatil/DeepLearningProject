@@ -1,7 +1,8 @@
 NUM_CLASSES = 2
 IMG_SIZE = 227
 FOLD = "0"
-DATA_TYPE = "gender"
+DATA_TYPE_GENDER = "gender"
+DATA_TYPE_AGE = "age"
 HOME_PATH = "/home/ubuntu/CourseProject"
 SOURCE_FOLDER = "AgeGenderDeepLearning/Folds/train_val_txt_files_per_fold/test_fold_is_"
 LEARNING_RATE=0.0001
