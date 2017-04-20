@@ -13,3 +13,5 @@ FOLDER_NAME = 'TYPE_{}_LR_{}_OPTIMIZER_{}_FOLD_{}'.format(DATA_TYPE, LEARNING_RA
 LOG_FILE = '{}/status.log'.format(FOLDER_NAME)
 MODEL_FILE = '{}/model.json'.format(FOLDER_NAME)
 WEIGHT_FILE = '{}/weights.h5'.format(FOLDER_NAME)
+NUM_LABELS_GENDER = 2
+NUM_LABELS_AGE = 10

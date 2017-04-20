@@ -14,7 +14,7 @@ import os
 import glob
 import shutil
 import constants
-
+import layers
 
 def remove_folder(path):
     if os.path.exists(path):
@@ -56,57 +56,12 @@ validation_X, validation_Y =  load_data(constants.HOME_PATH, constants.SOURCE_FO
 
 #######################################################################
 
-def add_layer_1(model):
-    conv1_kernel_init= RandomNormal(stddev=0.01)
-    conv1_bias_init = Constant(value=0)
-    model.add(Conv2D(filters = 96, kernel_size=(7,7), strides=(4,4), padding="valid",  kernel_initializer=conv1_kernel_init, bias_initializer=conv1_bias_init, input_shape=(227,227,3)))
-    model.add(Activation('relu'))
-    model.add(MaxPooling2D(pool_size=(3, 3), strides =(2,2)))
-    print("conv1"+str(model.output_shape))
-
-def add_layer_2(model):
-    conv2_kernel_init= RandomNormal(stddev=0.01)
-    conv2_bias_init = Constant(value=0)
-    model.add(Conv2D(filters = 256, kernel_size=(5,5), strides=(1,1), kernel_initializer=conv2_kernel_init, bias_initializer=conv2_bias_init,  padding="same"))
-    model.add(Activation('relu'))
-    model.add(MaxPooling2D(pool_size=(3, 3), strides =2))
-    print("conv2"+str(model.output_shape))
-
-def add_layer_3(model):
-    conv3_kernel_init= RandomNormal(stddev=0.01)
-    conv3_bias_init = Constant(value=0)
-    model.add(Conv2D(filters = 384, kernel_size=(3,3),strides=(1,1),  kernel_initializer=conv3_kernel_init, bias_initializer=conv3_bias_init,  padding="valid"))
-    model.add(Activation('relu'))
-    model.add(MaxPooling2D(pool_size=(3, 3), strides =2))
-    print("conv3"+str(model.output_shape))
-    model.add(Flatten())
-    print("flatten"+str(model.output_shape))
-
-def add_dense_layers(model):
-    dense_kernel_init= RandomNormal(stddev=0.005)
-    dense_bias_init = Constant(value=1)
-    model.add(Dense(units= 512, kernel_initializer=dense_kernel_init, bias_initializer=dense_bias_init))
-    model.add(Activation('relu'))
-    model.add(Dropout(0.5))
-
-    print("dense1"+str(model.output_shape))
-
-    model.add(Dense(units= 512, kernel_initializer=dense_kernel_init, bias_initializer=dense_bias_init))
-    model.add(Activation('relu'))
-    model.add(Dropout(0.5))
-
-    print("dens2"+str(model.output_shape))
-
-def add_objective_layer(model):
-    model.add(Dense(2, activation='softmax'))
-    print("softmax"+str(model.output_shape))
-
 def build_model(model):
-    add_layer_1(model)
-    add_layer_2(model)
-    add_layer_3(model)
-    add_dense_layers(model)
-    add_objective_layer(model)
+    layers.add_layer_1(model)
+    layers.add_layer_2(model)
+    layers.add_layer_3(model)
+    layers.add_dense_layers(model)
+    layers.add_objective_layer(model, constants.NUM_LABELS_GENDER)
 
 def lr_schedule(epoch):
     return constants.LEARNING_RATE*(0.1**int(2*epoch/constants.EPOCHS))
@@ -137,23 +92,23 @@ def test_model(model):
     scores = model.evaluate(test_X, test_Y, verbose=0)
     print("%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
 
-def load_model():
-    json_file = open('/home/ubuntu/CourseProject/notebook/rmsprop_fold_0_LR_0_0001/model.json', 'r')
-    loaded_model_json = json_file.read()
-    json_file.close()
-    loaded_model = model_from_json(loaded_model_json)
-
-    loaded_model.load_weights('/home/ubuntu/CourseProject/notebook/rmsprop_fold_0_LR_0_0001/model.h5')
-    print("Loaded model from disk")
-
-    # evaluate loaded model on test data
-    loaded_model.compile(loss='binary_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
-    score = loaded_model.evaluate(test_X, test_Y, verbose=0)
-    print("%s: %.2f%%" % (loaded_model.metrics_names[1], score[1]*100))
+# def load_model():
+#     json_file = open('/home/ubuntu/CourseProject/notebook/rmsprop_fold_0_LR_0_0001/model.json', 'r')
+#     loaded_model_json = json_file.read()
+#     json_file.close()
+#     loaded_model = model_from_json(loaded_model_json)
+#
+#     loaded_model.load_weights('/home/ubuntu/CourseProject/notebook/rmsprop_fold_0_LR_0_0001/model.h5')
+#     print("Loaded model from disk")
+#
+#     # evaluate loaded model on test data
+#     loaded_model.compile(loss='binary_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+#     score = loaded_model.evaluate(test_X, test_Y, verbose=0)
+#     print("%s: %.2f%%" % (loaded_model.metrics_names[1], score[1]*100))
 
 
 model = Sequential()
 train_model(model, train_X, train_Y, validation_X, validation_Y)
 test_model(model)
 save_model(model)
-load_model()
+# load_model()
