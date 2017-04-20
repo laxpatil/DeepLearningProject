@@ -32,9 +32,6 @@ def build_gender_model(model):
     layers.add_dense_layers(model)
     layers.add_objective_layer(model, constants.NUM_LABELS_GENDER)
 
-def lr_schedule(epoch):
-    return constants.LEARNING_RATE*(0.1**int(2*epoch/constants.EPOCHS))
-
 def train_gender_model(model, X, Y, val_X, val_Y):
     utilities.remove_folder(constants.FOLDER_NAME_GENDER)
     csv_logger = CSVLogger(constants.LOG_FILE_GENDER)
@@ -47,7 +44,7 @@ def train_gender_model(model, X, Y, val_X, val_Y):
               epochs=constants.EPOCHS,
               validation_split=0.0,
               validation_data=(val_X,val_Y),
-              callbacks=[LearningRateScheduler(lr_schedule), csv_logger]
+              callbacks=[LearningRateScheduler(utilities.lr_schedule), csv_logger]
              )
 
 def test_model(model):

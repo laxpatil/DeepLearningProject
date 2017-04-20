@@ -53,3 +53,6 @@ def load_data(home_folder, source_folder, fold_number, data_type, image_type):
     # Make one hot targets
     Y = np.eye(constants.NUM_CLASSES, dtype='uint8')[labels]
     return X, Y
+
+def lr_schedule(epoch):
+    return constants.LEARNING_RATE*(0.1**int(2*epoch/constants.EPOCHS))
