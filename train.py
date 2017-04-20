@@ -16,36 +16,11 @@ import shutil
 import constants
 import layers
 
-def load_data(home_folder, source_folder, fold_number, data_type, image_type):
-    images_path_file = '{}/{}{}/{}_{}.txt'.format(home_folder, source_folder, fold_number, image_type, data_type)
-    actual_images = '{}/processed_{}_{}/'.format(home_folder, data_type, fold_number)
-    load_message = 'Loading {} data\n#############\n'.format(data_type)
-
-    data=[]
-    labels=[]
-
-    all_img_paths = open(images_path_file)
-    print (load_message)
-    for i, img_path in enumerate(all_img_paths):
-        if(i%1000 == 0):
-            print ("Loaded " + str(i) + " images")
-
-        path = img_path.strip('\n').split(' ')[0]
-        label = int(img_path.strip('\n').split(' ')[1])
-        img = io.imread(actual_images+path)
-        data.append(img)
-        labels.append(label)
-
-    X = np.array(data, dtype='float32')
-    # Make one hot targets
-    Y = np.eye(constants.NUM_CLASSES, dtype='uint8')[labels]
-    return X, Y
-
 #######################################################################
 
-train_X, train_Y =  load_data(constants.HOME_PATH, constants.SOURCE_FOLDER , constants.FOLD, 'train', constants.DATA_TYPE_GENDER)
-test_X, test_Y =  load_data(constants.HOME_PATH, constants.SOURCE_FOLDER, constants.FOLD, 'test', constants.DATA_TYPE_GENDER)
-validation_X, validation_Y =  load_data(constants.HOME_PATH, constants.SOURCE_FOLDER, constants.FOLD, 'validation', constants.DATA_TYPE_GENDER)
+train_X, train_Y =  utilities.load_data(constants.HOME_PATH, constants.SOURCE_FOLDER , constants.FOLD, 'train', constants.DATA_TYPE_GENDER)
+test_X, test_Y =  utilities.load_data(constants.HOME_PATH, constants.SOURCE_FOLDER, constants.FOLD, 'test', constants.DATA_TYPE_GENDER)
+validation_X, validation_Y =  utilities.load_data(constants.HOME_PATH, constants.SOURCE_FOLDER, constants.FOLD, 'validation', constants.DATA_TYPE_GENDER)
 
 #######################################################################
 
@@ -60,7 +35,7 @@ def lr_schedule(epoch):
     return constants.LEARNING_RATE*(0.1**int(2*epoch/constants.EPOCHS))
 
 def train_gender_model(model, X, Y, val_X, val_Y):
-    remove_folder(constants.FOLDER_NAME_GENDER)
+    utilities.remove_folder(constants.FOLDER_NAME_GENDER)
     csv_logger = CSVLogger(constants.LOG_FILE_GENDER)
     build_gender_model(model)
     model.compile(loss='binary_crossentropy',
