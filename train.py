@@ -57,4 +57,4 @@ def test_model(model):
 model = Sequential()
 train_gender_model(model, train_X, train_Y, validation_X, validation_Y)
 test_model(model)
-utilities.save_model(model, constants.MODEL_FILE, constants.WEIGHT_FILE)
+utilities.save_model(model, constants.MODEL_FILE_GENDER, constants.WEIGHT_FILE_GENDER)
