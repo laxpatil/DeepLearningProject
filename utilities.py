@@ -13,6 +13,7 @@ from skimage import io
 import os
 import glob
 import shutil
+import constants
 
 def remove_folder(path):
     if os.path.exists(path):
