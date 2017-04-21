@@ -24,10 +24,7 @@ def load_model():
 
     loaded_model.load_weights('/home/ubuntu/CourseProject/notebook/rmsprop_fold_0_LR_0_0001/model.h5')
     print("Loaded model from disk")
-
-train_X, train_Y =  utilities.load_data(constants.HOME_PATH, constants.SOURCE_FOLDER , constants.FOLD, 'train', constants.DATA_TYPE_AGE, constants.NUM_LABELS_AGE)
-# test_X, test_Y =  load_data(constants.HOME_PATH, constants.SOURCE_FOLDER, constants.FOLD, 'test', constants.DATA_TYPE_AGE)
-validation_X, validation_Y =  utilities.load_data(constants.HOME_PATH, constants.SOURCE_FOLDER, constants.FOLD, 'validation', constants.DATA_TYPE_AGE, constants.NUM_LABELS_AGE)
+    return loaded_model
 
 def build_age_model(loaded_model):
     loaded_model.pop()
@@ -36,6 +33,7 @@ def build_age_model(loaded_model):
 def train_age_model(loaded_model, X, Y, val_X, val_Y):
     utilities.remove_folder(constants.FOLDER_NAME_AGE)
     csv_logger = CSVLogger(constants.LOG_FILE_AGE)
+    loaded_model = load_model()
     build_age_model(loaded_model)
     model.compile(loss='binary_crossentropy',
                   optimizer=constants.OPTIMIZER,
@@ -48,6 +46,10 @@ def train_age_model(loaded_model, X, Y, val_X, val_Y):
               callbacks=[LearningRateScheduler(utilities.lr_schedule), csv_logger]
              )
 
+train_X, train_Y =  utilities.load_data(constants.HOME_PATH, constants.SOURCE_FOLDER , constants.FOLD, 'train', constants.DATA_TYPE_AGE, constants.NUM_LABELS_AGE)
+# test_X, test_Y =  load_data(constants.HOME_PATH, constants.SOURCE_FOLDER, constants.FOLD, 'test', constants.DATA_TYPE_AGE)
+validation_X, validation_Y =  utilities.load_data(constants.HOME_PATH, constants.SOURCE_FOLDER, constants.FOLD, 'validation', constants.DATA_TYPE_AGE, constants.NUM_LABELS_AGE)
+
 train_age_model(loaded_model, train_X, train_Y, validation_X, validation_Y)
 # test_model(model)
-utilities.save_model(model, constants.MODEL_FILE, constants.WEIGHT_FILE)
+utilities.save_model(model, constants.MODEL_FILE_AGE, constants.WEIGHT_FILE_AGE)
