@@ -15,6 +15,7 @@ import glob
 import shutil
 import constants
 import utilities
+import layers
 
 def load_model():
     json_file = open('/home/ubuntu/CourseProject/notebook/rmsprop_fold_0_LR_0_0001/model.json', 'r')
