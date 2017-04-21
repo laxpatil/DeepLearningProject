@@ -31,7 +31,7 @@ def save_model(model, model_file, weight_file):
 
 def load_data(home_folder, source_folder, fold_number, data_type, image_type):
     images_path_file = '{}/{}{}/{}_{}.txt'.format(home_folder, source_folder, fold_number, image_type, data_type)
-    actual_images = '{}/processed_{}_{}/'.format(home_folder, data_type, fold_number)
+    actual_images = '{}/processed_{}_{}_{}/'.format(home_folder, data_type, image_type, fold_number)
     load_message = 'Loading {} data\n#############\n'.format(data_type)
 
     data=[]
