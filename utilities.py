@@ -29,7 +29,7 @@ def save_model(model, model_file, weight_file):
     model.save_weights(weight_file)
     print("Saved model to disk")
 
-def load_data(home_folder, source_folder, fold_number, data_type, image_type):
+def load_data(home_folder, source_folder, fold_number, data_type, image_type, num_labels):
     images_path_file = '{}/{}{}/{}_{}.txt'.format(home_folder, source_folder, fold_number, image_type, data_type)
     actual_images = '{}/processed_{}_{}_{}/'.format(home_folder, data_type, image_type, fold_number)
     load_message = 'Loading {} data\n#############\n'.format(data_type)
@@ -51,7 +51,7 @@ def load_data(home_folder, source_folder, fold_number, data_type, image_type):
 
     X = np.array(data, dtype='float32')
     # Make one hot targets
-    Y = np.eye(constants.NUM_CLASSES, dtype='uint8')[labels]
+    Y = np.eye(num_labels, dtype='uint8')[labels]
     return X, Y
 
 def lr_schedule(epoch):
