@@ -35,10 +35,10 @@ def train_age_model(loaded_model, X, Y, val_X, val_Y):
     utilities.remove_folder(constants.FOLDER_NAME_AGE)
     csv_logger = CSVLogger(constants.LOG_FILE_AGE)
     build_age_model(loaded_model)
-    model.compile(loss='binary_crossentropy',
+    loaded_model.compile(loss='binary_crossentropy',
                   optimizer=constants.OPTIMIZER,
                   metrics=['accuracy'])
-    model.fit(X, Y,
+    loaded_model.fit(X, Y,
               batch_size=constants.BATCH_SIZE,
               epochs=constants.EPOCHS,
               validation_split=0.0,
