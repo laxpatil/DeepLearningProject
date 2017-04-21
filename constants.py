@@ -20,4 +20,4 @@ FOLDER_NAME_AGE = 'TYPE_{}_LR_{}_OPTIMIZER_{}_FOLD_{}'.format(DATA_TYPE_AGE, LEA
 LOG_FILE_AGE = '{}/status.log'.format(FOLDER_NAME_AGE)
 MODEL_FILE_AGE = '{}/model.json'.format(FOLDER_NAME_AGE)
 WEIGHT_FILE_AGE = '{}/weights.h5'.format(FOLDER_NAME_AGE)
-NUM_LABELS_AGE = 10
+NUM_LABELS_AGE = 8
