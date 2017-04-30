@@ -32,7 +32,7 @@ def save_model(model, model_file, weight_file):
 def load_data(home_folder, source_folder, fold_number, data_type, image_type, num_labels):
     images_path_file = '{}/{}{}/{}_{}.txt'.format(home_folder, source_folder, fold_number, image_type, data_type)
     actual_images = '{}/processed_{}_{}_{}/'.format(home_folder, data_type, image_type, fold_number)
-    load_message = 'Loading {} data\n#############\n'.format(data_type)
+    load_message = '\n Loading {} data from \n image path: {} \n actual image: {}\n#############\n'.format(data_type,images_path_file, actual_images)
 
     data=[]
     labels=[]
@@ -40,8 +40,6 @@ def load_data(home_folder, source_folder, fold_number, data_type, image_type, nu
     all_img_paths = open(images_path_file)
     print (load_message)
     for i, img_path in enumerate(all_img_paths):
-        if(i%1000 == 0):
-            print ("Loaded " + str(i) + " images")
 
         path = img_path.strip('\n').split(' ')[0]
         label = int(img_path.strip('\n').split(' ')[1])
@@ -49,10 +47,22 @@ def load_data(home_folder, source_folder, fold_number, data_type, image_type, nu
         data.append(img)
         labels.append(label)
 
+        if(i%1000 == 0):
+            print ("Loaded " + str(i) + " images")
+
     X = np.array(data, dtype='float32')
     # Make one hot targets
     Y = np.eye(num_labels, dtype='uint8')[labels]
     return X, Y
 
 def lr_schedule(epoch):
-    return constants.LEARNING_RATE*(0.1**int(2*epoch/constants.EPOCHS))
+    return constants.LEARNING_RATE*(0.1**int(2*epoch/constants.EPOCHS_GENDER))
+
+def lr_schedule_age(epoch):
+    return constants.LEARNING_RATE_AGE*(0.1**int(2*epoch/constants.EPOCHS_AGE))
+
+def test_model(model, test_X, test_Y):
+    scores = model.evaluate(test_X, test_Y, verbose=0)
+    print("%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
+
+
