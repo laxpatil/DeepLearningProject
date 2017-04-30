@@ -50,10 +50,20 @@ def load_model():
 
 
 def unfreeze_dense_layers(model):
+    """
+    This function modifies the trainable parameter for dense layers
+                          
+    """
     model.layers[13].trainable=True  #dense layer1
     model.layers[16].trainable=True  #dense layer2
 
 def build_age_model(model):
+    """
+    This function replaces the gender softmax layer with age softmax layer
+    Args:
+        model: A keras model object to be fine tuned.
+                          
+    """
     for each_layer in model.layers:
         each_layer.trainable=False
 
