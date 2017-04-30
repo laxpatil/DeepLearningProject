@@ -29,6 +29,12 @@ import utilities
 import train_base_gender
 
 def load_model():
+    """
+    This function loads the gender model and loads it with the learnt weights
+    Returns:
+        Keras.model: A keras model object that has been initialized with weights.
+                          
+    """
     model_file = constants.MODEL_FILE_GENDER 
     weight_file = constants.WEIGHT_FILE_GENDER
        
@@ -42,10 +48,26 @@ def load_model():
     return loaded_model
 
 def build_age_model(model):
+    """
+    This function replaces the gender softmax layer with age softmax layer
+    Args:
+        model: A keras model object to be fine tuned.
+                          
+    """    
     model.layers.pop()
     layers.add_objective_layer(model, constants.NUM_LABELS_AGE, 'age')
 
 def train_age_model(model, X, Y, val_X, val_Y):
+    """ 
+    This function trains the age classification model
+    Args:
+        model: A keras model object to be trained.
+        X: A numpy.ndarray of training data
+        Y: A numpy.ndarray of training data labels
+        val_X: A numpy.ndarray of validation data
+        val_Y: A numpy.ndarray of validation data labels
+                          
+    """    
     utilities.remove_folder(constants.FOLDER_NAME_AGE)
     csv_logger = CSVLogger(constants.LOG_FILE_AGE)
     build_age_model(model)
@@ -61,10 +83,25 @@ def train_age_model(model, X, Y, val_X, val_Y):
              )
 
 def test_model(model, test_X, test_Y):
+    """
+    This function checks accuracy of the model on the supplied test data.
+    Args:
+        model: The Keras model object which is to be tested.
+        test_X: Numpy array of test data 
+        test_Y: Numpy array of test data ground truth        
+                          
+    """    
     scores = model.evaluate(test_X, test_Y, verbose=0)
     print("%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
 
 def train_model():
+    """ 
+    This function does run time profiling and wraps around the function for model training. It loads the train, test and validation data, trains the age models and saves down parameters.
+    
+    Returns:
+        Keras.model: Returns the learnt model                      
+    
+    """
     model= train_base_gender.train_model()
     
     #####################
@@ -96,10 +133,7 @@ def train_model():
     
     #############################
 
-
-
     return model
-
 
 if __name__ == "__main__":
     train_model()

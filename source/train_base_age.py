@@ -27,6 +27,12 @@ import utilities
 import layers
 
 def build_age_model(model):
+    """
+    This function builds the base age classifier network
+    Args:
+        model: A keras model object to be fine tuned.
+                          
+    """   
     layers.add_layer_1(model)
     layers.add_layer_2(model)
     layers.add_layer_3(model)
@@ -34,6 +40,16 @@ def build_age_model(model):
     layers.add_objective_layer(model, constants.NUM_LABELS_AGE, 'age')
 
 def train_age_model(loaded_model, X, Y, val_X, val_Y):
+    """ 
+    This function trains the age classification model
+    Args:
+        model: A keras model object to be trained.
+        X: A numpy.ndarray of training data
+        Y: A numpy.ndarray of training data labels
+        val_X: A numpy.ndarray of validation data
+        val_Y: A numpy.ndarray of validation data labels
+                          
+    """   
     utilities.remove_folder(constants.FOLDER_NAME_AGE)
     csv_logger = CSVLogger(constants.LOG_FILE_AGE)
     build_age_model(loaded_model)
@@ -49,7 +65,13 @@ def train_age_model(loaded_model, X, Y, val_X, val_Y):
              )
 
 def train_model():
-
+    """ 
+    This function does run time profiling and wraps around the function for model training. It loads the train, test and validation data, trains the age models and saves down parameters.
+    
+    Returns:
+        Keras.model: Returns the learnt model                      
+    
+    """
     #####################
     
     import time
@@ -75,7 +97,6 @@ def train_model():
     print("\n##################################################################")
     
     #############################
-
 
     return model
 
