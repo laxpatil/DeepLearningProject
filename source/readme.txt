@@ -1,14 +1,14 @@
 Environment Setup, Data Preprocessing and Code Execution
 
-Download and install Ananconda (https://www.continuum.io/downloads)
+1. Download and install Ananconda (https://www.continuum.io/downloads)
 
-Download and isntall GPU libraries (CUDA, nvidia-smi: https://developer.nvidia.com/cuda-downloads) 
+2. Download and install GPU libraries (CUDA, nvidia-smi: https://developer.nvidia.com/cuda-downloads) 
 
-Install Keras for GPU use after installing the required dependencies (https://keras.io/#installation)
+3. Install Keras for GPU use after installing the required dependencies (https://keras.io/#installation)
 
-Install Tensor Flow for GPU (https://www.tensorflow.org/install/install_linux#NVIDIARequirements)
+4. Install Tensor Flow for GPU (https://www.tensorflow.org/install/install_linux#NVIDIARequirements)
 
-Modify the keras.json  file according to the GPU backend. Keras.json can be found in ~/.keras/keras.json
+5. Modify the keras.json  file according to the GPU backend. Keras.json can be found in ~/.keras/keras.json
  	
 	Specify ‘tensorflow’/’theano’ in ‘backend’ filed accordingly.
 	
@@ -20,23 +20,23 @@ Modify the keras.json  file according to the GPU backend. Keras.json can be foun
    	 	"backend": "tensorflow"
 	}
 
-Download raw data (http://www.openu.ac.il/home/hassner/Adience/data.html#agegender)
+6. Download raw data (http://www.openu.ac.il/home/hassner/Adience/data.html#agegender)
 
-Run the data pre processing script from the code folder. 
+7. Run the data pre processing script from the code folder. 
 
-	Clone the github repository: https://github.com/GilLevi/AgeGenderDeepLearning
+	a. Clone the github repository: https://github.com/GilLevi/AgeGenderDeepLearning
 
-	Specify the correct path for cloned folder in “images_path_file” in convertImages_gender.py/convertImages.age.py
+	b. Specify the correct path for cloned folder in “images_path_file” in convertImages_gender.py/convertImages.age.py
 
-	Specify path for actual dataset images “aligned” folder in variable “actual_images” 
+	c. Specify path for actual dataset images “aligned” folder in variable “actual_images” 
 
-	Run convertImages_gender.py /  convertImages_age.py
+	d. Run convertImages_gender.py /  convertImages_age.py
 
-Set up proper paths and run config in constants.py
+8. Set up proper paths and run config in constants.py
 
-Run the runproject.py script to execute code with options
+9. Run the runproject.py script to execute code with options
 
-Run individual script file to run specific code.
+10. Run individual script file to run specific code.
 
 	Option 1: Run train_base_gender.py  for training base Gender Model
 	Option 2: Run train_base_age.py for training base Age model
