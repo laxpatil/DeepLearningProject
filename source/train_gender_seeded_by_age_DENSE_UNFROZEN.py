@@ -29,6 +29,12 @@ import utilities
 import train_base_age
 
 def load_model():
+    """
+    This function loads the age model and loads it with the learnt weights
+    Returns:
+        Keras.model: A keras model object that has been initialized with weights.
+                          
+    """
     model_file = constants.MODEL_FILE_AGE 
     weight_file = constants.WEIGHT_FILE_AGE 
        
@@ -39,28 +45,44 @@ def load_model():
    
     loaded_model.load_weights(weight_file)
     print("Loaded model from disk\n {}".format(constants.MODEL_FILE_AGE))
-    #print(loaded_model.summary())
     return loaded_model
 
 
 def unfreeze_dense_layers(model):
+    """
+    This function modifies the trainable parameter for dense layers
+                          
+    """
     model.layers[13].trainable=True  #dense layer1
     model.layers[16].trainable=True  #dense layer2
 
 def build_gender_model(model):
+    """
+    This function replaces the age softmax layer with gender softmax layer
+    Args:
+        model: A keras model object to be fine tuned.
+                          
+    """
     for each_layer in model.layers:
 	each_layer.trainable=False
     
     # unfreeze dense layers
     unfreeze_dense_layers(model)
 
-    
     model.layers.pop()
     layers.add_objective_layer(model, constants.NUM_LABELS_GENDER, 'gender')
-    #print(model.get_config())
-
 
 def train_gender_model(model, X, Y, val_X, val_Y):
+    """ 
+    This function trains the gender classification model
+    Args:
+        model: A keras model object to be trained.
+        X: A numpy.ndarray of training data
+        Y: A numpy.ndarray of training data labels
+        val_X: A numpy.ndarray of validation data
+        val_Y: A numpy.ndarray of validation data labels
+                          
+    """
     utilities.remove_folder(constants.FOLDER_NAME_GENDER)
     csv_logger = CSVLogger(constants.LOG_FILE_GENDER)
     build_gender_model(model)
@@ -76,13 +98,25 @@ def train_gender_model(model, X, Y, val_X, val_Y):
              )
 
 def test_model(model, test_X, test_Y):
+    """
+    This function checks accuracy of the model on the supplied test data.
+    Args:
+        model: The Keras model object which is to be tested.
+        test_X: Numpy array of test data 
+        test_Y: Numpy array of test data ground truth        
+                          
+    """
     scores = model.evaluate(test_X, test_Y, verbose=0)
     print("%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
 
-
-
 def train_model():
+    """ 
+    This function does run time profiling and wraps around the function for model training. It loads the train, test and validation data, trains the age models and saves down parameters.
     
+    Returns:
+        Keras.model: Returns the learnt model                      
+    
+    """    
     model = train_base_age.train_model()    
 
     #####################
@@ -117,7 +151,6 @@ def train_model():
     print("\n##################################################################")
     
     #############################
-
 
     return model
 

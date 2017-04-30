@@ -48,7 +48,7 @@ def load_model():
 
 def build_age_model(model):
     """
-    This function replaces the gendeer softmax layer with age softmax layer
+    This function replaces the gender softmax layer with age softmax layer
     Args:
         model: A keras model object to be fine tuned.
                           

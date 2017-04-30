@@ -30,6 +30,12 @@ import utilities
 
 
 def build_gender_model(model):
+    """
+    This function builds the base gender classifier network
+    Args:
+        model: A keras model object to be fine tuned.
+                          
+    """ 
     layers.add_layer_1(model)
     layers.add_layer_2(model)
     layers.add_layer_3(model)
@@ -37,6 +43,16 @@ def build_gender_model(model):
     layers.add_objective_layer(model, constants.NUM_LABELS_GENDER, 'gender')
 
 def train_gender_model(model, X, Y, val_X, val_Y):
+    """ 
+    This function trains the gender classification model
+    Args:
+        model: A keras model object to be trained.
+        X: A numpy.ndarray of training data
+        Y: A numpy.ndarray of training data labels
+        val_X: A numpy.ndarray of validation data
+        val_Y: A numpy.ndarray of validation data labels
+                          
+    """   
     print("Training Base Gender Model")
     utilities.remove_folder(constants.FOLDER_NAME_GENDER)
     csv_logger = CSVLogger(constants.LOG_FILE_GENDER)
@@ -57,7 +73,13 @@ def test_model(model,test_X, test_Y):
     print("%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
 
 def train_model():
-
+    """ 
+    This function does run time profiling and wraps around the function for model training. It loads the train, test and validation data, trains the age models and saves down parameters.
+    
+    Returns:
+        Keras.model: Returns the learnt model                      
+    
+    """
     #####################
     
     import time
