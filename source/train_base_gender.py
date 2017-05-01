@@ -106,7 +106,7 @@ def train_model():
     total_time = time.clock() - start
     
     print("\n##################################################################")
-    print("\n\nTotal Exceution time for this section : "  + str(total_time) )
+    print("\n\nTotal Exceution time for this section : "  + str(total_time) +" secs")
     print("\n##################################################################")
     
     #############################
